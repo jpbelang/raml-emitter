@@ -9,6 +9,9 @@ import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 import org.raml.yagi.framework.model.DefaultModelBindingConfiguration;
 import org.raml.yagi.framework.model.ModelBindingConfiguration;
 import org.raml.yagi.framework.model.ModelProxyBuilder;
+import org.raml.yagi.framework.nodes.KeyValueNodeImpl;
+import org.raml.yagi.framework.nodes.ObjectNode;
+import org.raml.yagi.framework.nodes.ObjectNodeImpl;
 import org.raml.yagi.framework.nodes.StringNodeImpl;
 
 import static org.raml.v2.api.RamlModelBuilder.MODEL_PACKAGE;
@@ -52,7 +55,7 @@ public class ResourceBuilder {
         return this;
     }
 
-    public ResourceBuilder withDisplayNamer(String displayName) {
+    public ResourceBuilder withDisplayName(String displayName) {
 
         this.displayName = displayName;
         return this;
@@ -67,7 +70,17 @@ public class ResourceBuilder {
     public Resource create() {
 
         ResourceNode rn = new ResourceNode();
-        rn.addChild(new StringNodeImpl("/goo"));
+        rn.addChild(new StringNodeImpl(resourcePath));
+        ObjectNode restNode = new ObjectNodeImpl();
+        rn.addChild(restNode);
+
+        if (displayName == null) {
+            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl("/goo")));
+        } else {
+
+            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl(displayName)));
+        }
+
         org.raml.v2.internal.impl.commons.model.Resource resource = new org.raml.v2.internal.impl.commons.model.Resource(rn);
         return ModelProxyBuilder.createModel(Resource.class, resource, createV10Binding());
     }

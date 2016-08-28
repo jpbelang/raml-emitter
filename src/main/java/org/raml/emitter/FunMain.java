@@ -53,9 +53,11 @@ public class FunMain {
         else
         {
             Api api = ramlModelResult.getApiV10();
-            System.err.println("displayName " + api.resources().get(0).displayName().value());
+            System.err.println("displayName " + api.resources().get(0).annotations());
             Resource r = ResourceBuilder.create("/baah").create();
             System.err.println("this " + r.displayName());
+
+
         }
     }
 }
