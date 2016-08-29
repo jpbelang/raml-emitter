@@ -74,11 +74,17 @@ public class ResourceBuilder {
         ObjectNode restNode = new ObjectNodeImpl();
         rn.addChild(restNode);
 
+
         if (displayName == null) {
             restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl("/goo")));
         } else {
-
             restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl(displayName)));
+        }
+
+        if (description != null) {
+            ObjectNodeImpl descNode = new ObjectNodeImpl();
+            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("description"), descNode));
+            descNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("value"), new StringNodeImpl(description)));
         }
 
         org.raml.v2.internal.impl.commons.model.Resource resource = new org.raml.v2.internal.impl.commons.model.Resource(rn);

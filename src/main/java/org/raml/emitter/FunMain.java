@@ -17,6 +17,7 @@ public class FunMain {
             + "baseUri: /shop\n"
             + " \n"
             + "/pets:\n"
+            + "  description: this is it\n"
             + "  get:\n"
             + "    responses:\n"
             + "      200:\n"
@@ -42,6 +43,7 @@ public class FunMain {
     public static void main(String[] args) {
 
 
+
         RamlModelResult ramlModelResult = new RamlModelBuilder().buildApi(raml1, ".");
         if (ramlModelResult.hasErrors())
         {
@@ -53,11 +55,13 @@ public class FunMain {
         else
         {
             Api api = ramlModelResult.getApiV10();
-            System.err.println("displayName " + api.resources().get(0).annotations());
-            Resource r = ResourceBuilder.create("/baah").create();
-            System.err.println("this " + r.displayName());
-
-
+            //           System.err.println("displayName " + api.resources().get(0).description().value());
         }
+
+
+        Resource r = ResourceBuilder.create("/baah").withDescription("It works!").create();
+        System.err.println("this " + r.description().value());
+
+
     }
 }
