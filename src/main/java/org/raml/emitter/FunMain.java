@@ -55,7 +55,7 @@ public class FunMain {
         else
         {
             Api api = ramlModelResult.getApiV10();
-            //           System.err.println("displayName " + api.resources().get(0).description().value());
+            System.err.println("displayName " + api.resources().get(0).description().value());
         }
 
 

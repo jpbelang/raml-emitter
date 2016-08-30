@@ -82,12 +82,16 @@ public class ResourceBuilder {
         }
 
         if (description != null) {
-            ObjectNodeImpl descNode = new ObjectNodeImpl();
-            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("description"), descNode));
-            descNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("value"), new StringNodeImpl(description)));
+            createProperty(restNode, "description", description);
         }
 
         org.raml.v2.internal.impl.commons.model.Resource resource = new org.raml.v2.internal.impl.commons.model.Resource(rn);
         return ModelProxyBuilder.createModel(Resource.class, resource, createV10Binding());
+    }
+
+    private static void createProperty(ObjectNode restNode, String name, String value) {
+        ObjectNodeImpl descNode = new ObjectNodeImpl();
+        restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl(name), descNode));
+        descNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("value"), new StringNodeImpl(value)));
     }
 }
