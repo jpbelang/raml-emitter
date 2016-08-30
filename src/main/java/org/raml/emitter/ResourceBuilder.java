@@ -76,9 +76,9 @@ public class ResourceBuilder {
 
 
         if (displayName == null) {
-            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl("/goo")));
+            createProperty(restNode, "displayName", resourcePath);
         } else {
-            restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("displayName"), new StringNodeImpl(displayName)));
+            createProperty(restNode, "displayName", displayName);
         }
 
         if (description != null) {

@@ -61,6 +61,8 @@ public class FunMain {
 
         Resource r = ResourceBuilder.create("/baah").withDescription("It works!").create();
         System.err.println("this " + r.description().value());
+        System.err.println("this " + r.displayName().value());
+
 
 
     }
