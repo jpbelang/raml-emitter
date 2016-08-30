@@ -59,9 +59,10 @@ public class FunMain {
         }
 
 
-        Resource r = ResourceBuilder.create("/baah").withDescription("It works!").create();
+        Resource r = ResourceBuilder.create("/baah").withDisplayName("sheep").withDescription("It works!").create();
         System.err.println("this " + r.description().value());
         System.err.println("this " + r.displayName().value());
+        System.err.println("this " + r.relativeUri().value());
 
 
 

@@ -9,7 +9,6 @@ import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 import org.raml.yagi.framework.model.DefaultModelBindingConfiguration;
 import org.raml.yagi.framework.model.ModelBindingConfiguration;
 import org.raml.yagi.framework.model.ModelProxyBuilder;
-import org.raml.yagi.framework.nodes.KeyValueNodeImpl;
 import org.raml.yagi.framework.nodes.ObjectNode;
 import org.raml.yagi.framework.nodes.ObjectNodeImpl;
 import org.raml.yagi.framework.nodes.StringNodeImpl;
@@ -20,7 +19,7 @@ import static org.raml.v2.api.RamlModelBuilder.MODEL_PACKAGE;
  * Created by ebeljea on 8/27/16.
  * Copyright Ericsson.
  */
-public class ResourceBuilder {
+public class ResourceBuilder extends BaseBuilder {
 
     private final String resourcePath;
     private String description;
@@ -70,7 +69,8 @@ public class ResourceBuilder {
     public Resource create() {
 
         ResourceNode rn = new ResourceNode();
-        rn.addChild(new StringNodeImpl(resourcePath));
+        createKey(rn, resourcePath);
+
         ObjectNode restNode = new ObjectNodeImpl();
         rn.addChild(restNode);
 
@@ -89,9 +89,8 @@ public class ResourceBuilder {
         return ModelProxyBuilder.createModel(Resource.class, resource, createV10Binding());
     }
 
-    private static void createProperty(ObjectNode restNode, String name, String value) {
-        ObjectNodeImpl descNode = new ObjectNodeImpl();
-        restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl(name), descNode));
-        descNode.addChild(new KeyValueNodeImpl(new StringNodeImpl("value"), new StringNodeImpl(value)));
+    private void createKey(ResourceNode rn, String key) {
+        rn.addChild(new StringNodeImpl(key));
     }
+
 }
