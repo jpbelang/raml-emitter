@@ -5,9 +5,7 @@ import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
 import org.raml.v2.api.model.v10.api.Api;
 import org.raml.v2.internal.impl.commons.nodes.RamlDocumentNode;
-import org.raml.yagi.framework.nodes.KeyValueNode;
 import org.raml.yagi.framework.nodes.Node;
-import org.raml.yagi.framework.nodes.ObjectNode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -59,13 +57,15 @@ public class Emitter {
         } else {
             Api api = ramlModelResult.getApiV10();
             Emitter.emit(api);
+            System.err.println(
+                    "AAA " + api.resources().get(0).methods().get(0).responses().get(0).body().get(0).displayName().value());
         }
+
 
     }
 
     private static void emit(Api api) throws NoSuchFieldException, IllegalAccessException {
 
-        System.err.println(api);
         InvocationHandler handler = Proxy.getInvocationHandler(api);
         Field o = handler.getClass().getDeclaredField("delegate");
         o.setAccessible(true);
@@ -77,31 +77,55 @@ public class Emitter {
 
     private static void emit(int depth, Node n) {
 
-        if (n instanceof KeyValueNode) {
-            for (int a = 0; a < depth; a++) {
+        int localdepth = depth;
+        Recognizer[] recogs = {new PropertyRecognizer(), new LeafRecognizer()};
 
-                System.out.print("\t");
+        for (int i = 0; i < n.getChildren().size(); i++) {
+
+            Node node = n.getChildren().get(i);
+            Recognizer pr = selectRecognizer(recogs, node);
+            if (pr.looksLike(node)) {
+                tabItUp(depth);
+                System.out.println(pr.getFragment(node));
+                localdepth = depth + 1;
+            } else {
+
+                emit(localdepth, node);
             }
-
-            KeyValueNode kvn = (KeyValueNode) n;
-            ObjectNode o = (ObjectNode) kvn.getValue();
-            KeyValueNode values = (KeyValueNode) o.getChildren().get(0);
-            System.out.println(kvn.getKey() + ": " + values.getValue());
-            return;
-        }
-
-        for (Node node : n.getChildren()) {
-
+/*
             if (node.getChildren().size() == 0) {
 
-                for (int a = 0; a < depth; a++) {
-
-                    System.out.print("\t");
+                tabItUp(depth);
+                if ( node.toString().equals("value")) {
+                    System.out.println(n.getChildren().get(i + 1));
+                    break;
+                } else {
+                    System.out.println(node + ":");
                 }
-                System.out.println(node);
+
+                localdepth = depth + 1;
             } else {
-                emit(depth + 1, node);
+                emit(localdepth, node);
             }
+            */
+        }
+
+    }
+
+    private static Recognizer selectRecognizer(Recognizer[] recogs, Node node) {
+        for (Recognizer recog : recogs) {
+            if (recog.looksLike(node)) {
+                return recog;
+            }
+        }
+
+        return new NotRecognizer();
+    }
+
+    private static void tabItUp(int depth) {
+        for (int a = 0; a < depth; a++) {
+
+            System.out.print("\t");
         }
     }
 
