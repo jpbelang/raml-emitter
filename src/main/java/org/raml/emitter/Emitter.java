@@ -45,6 +45,51 @@ public class Emitter {
             + "      responses:\n"
             + "        400:";
 
+    public static String output = "#%RAML 1.0\n"
+            + "title: Pet shop\n"
+            + "version: 1\n"
+            + "baseUri: /shop\n"
+            + "  /pets:\n"
+            + "    description: this is it\n"
+            + "      get:\n"
+            + "        responses:\n"
+            + "          200:\n"
+            + "            body:\n"
+            + "              application/json:\n"
+            + "                type: any\n"
+            + "                displayName: application/json\n"
+            + "            displayName: 200\n"
+            + "        displayName: get\n"
+            + "      post:\n"
+            + "        body:\n"
+            + "          application/json:\n"
+            + "            type: object\n"
+            + "              properties:\n"
+            + "                name:\n"
+            + "                  type: string\n"
+            + "                  displayName: name\n"
+            + "                kind:\n"
+            + "                  type: string\n"
+            + "                  displayName: kind\n"
+            + "                price:\n"
+            + "                  type: number\n"
+            + "                  displayName: price\n"
+            + "            displayName: application/json\n"
+            + "        displayName: post\n"
+            + "      /{id}:\n"
+            + "        put:\n"
+            + "          body:\n"
+            + "            application/json:\n"
+            + "              type: any\n"
+            + "              displayName: application/json\n"
+            + "          displayName: put\n"
+            + "        delete:\n"
+            + "          responses:\n"
+            + "            400:\n"
+            + "          displayName: delete\n"
+            + "        displayName: /{id}\n"
+            + "    displayName: /pets\n";
+
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
 
 
@@ -55,10 +100,9 @@ public class Emitter {
                 System.out.println(validationResult.getMessage());
             }
         } else {
+            ramlModelResult.getApiV08();
             Api api = ramlModelResult.getApiV10();
             Emitter.emit(api);
-            System.err.println(
-                    "AAA " + api.resources().get(0).methods().get(0).responses().get(0).body().get(0).displayName().value());
         }
 
 
@@ -72,13 +116,14 @@ public class Emitter {
         org.raml.v2.internal.impl.commons.model.Api delegate = (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
 
         RamlDocumentNode node = (RamlDocumentNode) delegate.getNode();
+        System.out.println("#%RAML 1.0");
         emit(0, node);
     }
 
     private static void emit(int depth, Node n) {
 
-        int localdepth = depth;
-        Recognizer[] recogs = {new PropertyRecognizer(), new LeafRecognizer()};
+        Recognizer[] recogs =
+                {new PropertyRecognizer(), new SimpleTypeRecognizer(), new NullNodeRecognizer(), new LeafRecognizer()};
 
         for (int i = 0; i < n.getChildren().size(); i++) {
 
@@ -87,27 +132,10 @@ public class Emitter {
             if (pr.looksLike(node)) {
                 tabItUp(depth);
                 System.out.println(pr.getFragment(node));
-                localdepth = depth + 1;
             } else {
 
-                emit(localdepth, node);
+                emit(depth + 1, node);
             }
-/*
-            if (node.getChildren().size() == 0) {
-
-                tabItUp(depth);
-                if ( node.toString().equals("value")) {
-                    System.out.println(n.getChildren().get(i + 1));
-                    break;
-                } else {
-                    System.out.println(node + ":");
-                }
-
-                localdepth = depth + 1;
-            } else {
-                emit(localdepth, node);
-            }
-            */
         }
 
     }
@@ -125,7 +153,7 @@ public class Emitter {
     private static void tabItUp(int depth) {
         for (int a = 0; a < depth; a++) {
 
-            System.out.print("\t");
+            System.out.print("  ");
         }
     }
 

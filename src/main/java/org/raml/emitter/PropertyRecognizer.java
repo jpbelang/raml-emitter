@@ -2,6 +2,8 @@ package org.raml.emitter;
 
 import org.raml.yagi.framework.nodes.KeyValueNode;
 import org.raml.yagi.framework.nodes.Node;
+import org.raml.yagi.framework.nodes.NullNode;
+import org.raml.yagi.framework.nodes.ObjectNode;
 
 /**
  * Created by ebeljea on 8/31/16.
@@ -19,6 +21,11 @@ public class PropertyRecognizer implements Recognizer {
             return false;
         }
 
+        if (!(node.getChildren().get(1) instanceof ObjectNode)) {
+
+            return false;
+        }
+
         if (node.getChildren().get(1).getChildren().size() != 1 || !(node.getChildren().get(1).getChildren()
                 .get(0) instanceof KeyValueNode)) {
 
@@ -32,6 +39,11 @@ public class PropertyRecognizer implements Recognizer {
     @Override public String getFragment(Node node) {
 
         KeyValueNode kvn = (KeyValueNode) node;
-        return kvn.getKey() + ": " + ((KeyValueNode) node.getChildren().get(1).getChildren().get(0)).getValue();
+        KeyValueNode valueNode = (KeyValueNode) node.getChildren().get(1).getChildren().get(0);
+        if (valueNode instanceof NullNode) {
+            return kvn.getKey() + ":";
+        } else {
+            return kvn.getKey() + ": " + valueNode.getValue();
+        }
     }
 }
