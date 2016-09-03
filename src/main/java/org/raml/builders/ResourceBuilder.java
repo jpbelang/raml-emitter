@@ -1,4 +1,4 @@
-package org.raml.emitter;
+package org.raml.builders;
 
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.raml.v2.api.model.v10.resources.Resource;
@@ -19,33 +19,35 @@ import static org.raml.v2.api.RamlModelBuilder.MODEL_PACKAGE;
  * Created by ebeljea on 8/27/16.
  * Copyright Ericsson.
  */
-public class ResourceBuilder extends BaseBuilder {
+public class ResourceBuilder extends BaseBuilder<Resource> {
 
     private final String resourcePath;
     private String description;
     private String displayName;
+    private MethodBuilder[] methodBuilders;
 
     public ResourceBuilder(String resourcePath) {
 
         this.resourcePath = resourcePath;
     }
 
-    private ModelBindingConfiguration createV10Binding() {
-        final DefaultModelBindingConfiguration bindingConfiguration = new DefaultModelBindingConfiguration();
+    public static ResourceBuilder create(String resourcePath) {
+        return new ResourceBuilder(resourcePath);
+    }
+
+    private static ModelBindingConfiguration createV10Binding() {
+        final DefaultModelBindingConfiguration bindingConfiguration =
+            new DefaultModelBindingConfiguration();
         bindingConfiguration.bindPackage(MODEL_PACKAGE);
         // Bind all StringTypes to the StringType implementation they are only marker interfaces
-        bindingConfiguration.bind(org.raml.v2.api.model.v10.system.types.StringType.class, StringType.class);
-        bindingConfiguration.bind(org.raml.v2.api.model.v10.system.types.ValueType.class, StringType.class);
+        bindingConfiguration
+            .bind(org.raml.v2.api.model.v10.system.types.StringType.class, StringType.class);
+        bindingConfiguration
+            .bind(org.raml.v2.api.model.v10.system.types.ValueType.class, StringType.class);
         bindingConfiguration.defaultTo(DefaultModelElement.class);
         bindingConfiguration.bind(TypeDeclaration.class, new TypeDeclarationModelFactory());
         bindingConfiguration.reverseBindPackage("org.raml.v2.api.model.v10.datamodel");
         return bindingConfiguration;
-    }
-
-    private MethodBuilder[] methodBuilders;
-
-    public static ResourceBuilder create(String resourcePath) {
-        return new ResourceBuilder(resourcePath);
     }
 
     public ResourceBuilder withDescription(String description) {
@@ -66,7 +68,7 @@ public class ResourceBuilder extends BaseBuilder {
         return this;
     }
 
-    public Resource create() {
+    @Override public Resource build() {
 
         ResourceNode rn = new ResourceNode();
         createKey(rn, resourcePath);
@@ -85,7 +87,8 @@ public class ResourceBuilder extends BaseBuilder {
             createProperty(restNode, "description", description);
         }
 
-        org.raml.v2.internal.impl.commons.model.Resource resource = new org.raml.v2.internal.impl.commons.model.Resource(rn);
+        org.raml.v2.internal.impl.commons.model.Resource resource =
+            new org.raml.v2.internal.impl.commons.model.Resource(rn);
         return ModelProxyBuilder.createModel(Resource.class, resource, createV10Binding());
     }
 

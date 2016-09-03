@@ -1,4 +1,4 @@
-package org.raml.emitter;
+package org.raml.builders;
 
 import org.raml.yagi.framework.nodes.KeyValueNodeImpl;
 import org.raml.yagi.framework.nodes.ObjectNode;
@@ -9,7 +9,7 @@ import org.raml.yagi.framework.nodes.StringNodeImpl;
  * Created by ebeljea on 8/29/16.
  * Copyright Ericsson.
  */
-public class BaseBuilder {
+abstract class BaseBuilder<T> implements Builder<T>{
     protected void createProperty(ObjectNode restNode, String name, String value) {
         ObjectNodeImpl descNode = new ObjectNodeImpl();
         restNode.addChild(new KeyValueNodeImpl(new StringNodeImpl(name), descNode));

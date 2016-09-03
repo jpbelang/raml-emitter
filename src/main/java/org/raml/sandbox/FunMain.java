@@ -1,5 +1,6 @@
-package org.raml.emitter;
+package org.raml.sandbox;
 
+import org.raml.builders.ResourceBuilder;
 import org.raml.v2.api.RamlModelBuilder;
 import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
@@ -59,7 +60,7 @@ public class FunMain {
         }
 
 
-        Resource r = ResourceBuilder.create("/baah").withDisplayName("sheep").withDescription("It works!").create();
+        Resource r = ResourceBuilder.create("/baah").withDisplayName("sheep").withDescription("It works!").build();
         System.err.println("this " + r.description().value());
         System.err.println("this " + r.displayName().value());
         System.err.println("this " + r.relativeUri().value());
