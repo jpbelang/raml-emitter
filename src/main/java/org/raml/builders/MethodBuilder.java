@@ -37,4 +37,14 @@ public class MethodBuilder extends BaseBuilder<MethodNode> {
         createValue(methodNode);
         return methodNode;
     }
+
+    @VisibleForTesting
+    String getName() {
+        return name;
+    }
+
+    @VisibleForTesting
+    NodeBuilder<MethodNode> getMethodNodeBuilder() {
+        return nodeBuilder;
+    }
 }

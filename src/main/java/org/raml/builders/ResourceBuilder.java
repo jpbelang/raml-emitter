@@ -11,8 +11,6 @@ import org.raml.yagi.framework.nodes.ObjectNodeImpl;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Created by ebeljea on 8/27/16.
- * Copyright Ericsson.
  */
 public class ResourceBuilder extends BaseBuilder<Resource> {
 
