@@ -9,7 +9,7 @@ import org.raml.yagi.framework.nodes.ObjectNode;
  * Created by ebeljea on 8/31/16.
  * Copyright Ericsson.
  */
-public class PropertyRecognizer implements Recognizer {
+public class PropertyRecognizer extends AbstractLeafRecognizer implements Recognizer {
     @Override public boolean looksLike(Node node) {
 
         if (!(node instanceof KeyValueNode)) {

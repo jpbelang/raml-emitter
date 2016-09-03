@@ -4,7 +4,6 @@ import org.raml.v2.api.RamlModelBuilder;
 import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
 import org.raml.v2.api.model.v10.api.Api;
-import org.raml.v2.internal.impl.commons.nodes.RamlDocumentNode;
 import org.raml.yagi.framework.nodes.Node;
 
 import java.lang.reflect.Field;
@@ -115,29 +114,28 @@ public class Emitter {
         o.setAccessible(true);
         org.raml.v2.internal.impl.commons.model.Api delegate = (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
 
-        RamlDocumentNode node = (RamlDocumentNode) delegate.getNode();
         System.out.println("#%RAML 1.0");
-        emit(0, node);
+        for (Node child : delegate.getNode().getChildren()) {
+
+            emit(0, child);
+        }
     }
 
-    private static void emit(int depth, Node n) {
+    private static void emit(int depth, Node node) {
 
         Recognizer[] recogs =
-                {new PropertyRecognizer(), new SimpleTypeRecognizer(), new NullNodeRecognizer(), new LeafRecognizer()};
+                {new PropertyRecognizer(), new SimpleTypeRecognizer(), new NullNodeRecognizer(), new EmptyLeafRecognizer(),
+                        new ContainingNodeRecognizer(), new NotRecognizer()};
 
-        for (int i = 0; i < n.getChildren().size(); i++) {
+        Recognizer pr = selectRecognizer(recogs, node);
+        if (pr.looksLike(node)) {
+            tabItUp(depth);
+            System.out.println(/*"[" + pr + "] " + */pr.getFragment(node));
+            for (Node childNode : pr.getChildren(node)) {
 
-            Node node = n.getChildren().get(i);
-            Recognizer pr = selectRecognizer(recogs, node);
-            if (pr.looksLike(node)) {
-                tabItUp(depth);
-                System.out.println(pr.getFragment(node));
-            } else {
-
-                emit(depth + 1, node);
+                emit(depth + 1, childNode);
             }
         }
-
     }
 
     private static Recognizer selectRecognizer(Recognizer[] recogs, Node node) {

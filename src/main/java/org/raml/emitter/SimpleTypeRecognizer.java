@@ -8,7 +8,7 @@ import org.raml.yagi.framework.nodes.SimpleTypeNode;
  * Created by ebeljea on 8/31/16.
  * Copyright Ericsson.
  */
-public class SimpleTypeRecognizer implements Recognizer {
+public class SimpleTypeRecognizer extends AbstractLeafRecognizer implements Recognizer {
     @Override public boolean looksLike(Node node) {
 
         if (!(node instanceof KeyValueNode)) {

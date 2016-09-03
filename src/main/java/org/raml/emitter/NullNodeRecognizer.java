@@ -8,7 +8,7 @@ import org.raml.yagi.framework.nodes.NullNode;
  * Created by ebeljea on 8/31/16.
  * Copyright Ericsson.
  */
-public class NullNodeRecognizer implements Recognizer {
+public class NullNodeRecognizer extends AbstractLeafRecognizer implements Recognizer {
     @Override public boolean looksLike(Node node) {
 
         if (!(node instanceof KeyValueNode)) {
