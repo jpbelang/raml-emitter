@@ -1,6 +1,12 @@
 package org.raml.sandbox;
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Module;
+import org.raml.builders.BuilderModule;
 import org.raml.builders.ResourceBuilder;
+import org.raml.builders.node.NodeBuilderModule;
+import org.raml.builders.proxy.ModelProxyBuilderModule;
 import org.raml.v2.api.RamlModelBuilder;
 import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
@@ -60,12 +66,14 @@ public class FunMain {
         }
 
 
-        Resource r = ResourceBuilder.create("/baah").withDisplayName("sheep").withDescription("It works!").build();
+        Resource r = Guice.createInjector(new BuilderModule(), new ModelProxyBuilderModule(), new NodeBuilderModule(), new Module() {
+            @Override public void configure(Binder binder) {
+                binder.bind(String.class).toInstance("/baah"); //Resource builder resource path.
+            }
+        }).getInstance(ResourceBuilder.class).withDisplayName("sheep").withDescription("It works!").build();
         System.err.println("this " + r.description().value());
         System.err.println("this " + r.displayName().value());
         System.err.println("this " + r.relativeUri().value());
-
-
 
     }
 }
