@@ -6,6 +6,7 @@ import com.google.inject.Provides;
 import org.raml.builders.node.NodeBuilder;
 import org.raml.builders.proxy.ModelProxyBuilder;
 import org.raml.v2.api.model.v10.resources.Resource;
+import org.raml.v2.internal.impl.commons.nodes.MethodNode;
 import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 
 public class BuilderModule extends PrivateModule {
@@ -14,10 +15,12 @@ public class BuilderModule extends PrivateModule {
         // Intentionally empty
     }
 
-    //TODO: the resource path should be injection assisted.
     @Provides @Exposed ResourceBuilder resourceBuilder(
-        ModelProxyBuilder<Resource> modelProxyBuilder, String resourcePath,
-        NodeBuilder<ResourceNode> nodeNodeBuilder) {
-        return ResourceBuilder.create(resourcePath, modelProxyBuilder, nodeNodeBuilder);
+        ModelProxyBuilder<Resource> modelProxyBuilder, NodeBuilder<ResourceNode> nodeNodeBuilder) {
+        return ResourceBuilder.create(modelProxyBuilder, nodeNodeBuilder);
+    }
+
+    @Provides @Exposed MethodBuilder methodBuilder(NodeBuilder<MethodNode> methodNodeBuilder) {
+        return MethodBuilder.create(methodNodeBuilder);
     }
 }

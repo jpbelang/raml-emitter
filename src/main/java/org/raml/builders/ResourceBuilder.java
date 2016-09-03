@@ -7,7 +7,6 @@ import org.raml.v2.api.model.v10.resources.Resource;
 import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 import org.raml.yagi.framework.nodes.ObjectNode;
 import org.raml.yagi.framework.nodes.ObjectNodeImpl;
-import org.raml.yagi.framework.nodes.StringNodeImpl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -17,32 +16,34 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ResourceBuilder extends BaseBuilder<Resource> {
 
-    private final String resourcePath;
     private final ModelProxyBuilder<Resource> modelProxyBuilder;
     private final NodeBuilder<ResourceNode> resourceNodeBuilder;
 
     private String description;
+    private String resourcePath;
     private String displayName;
     private MethodBuilder[] methodBuilders;
 
-    @VisibleForTesting ResourceBuilder(String resourcePath,
-        ModelProxyBuilder<Resource> modelProxyBuilder,
+    @VisibleForTesting ResourceBuilder(ModelProxyBuilder<Resource> modelProxyBuilder,
         NodeBuilder<ResourceNode> resourceNodeBuilder) {
 
-        this.resourcePath = resourcePath;
         this.modelProxyBuilder = modelProxyBuilder;
         this.resourceNodeBuilder = resourceNodeBuilder;
     }
 
-    static ResourceBuilder create(String resourcePath,
-        ModelProxyBuilder<Resource> modelProxyBuilder,
+    static ResourceBuilder create(ModelProxyBuilder<Resource> modelProxyBuilder,
         NodeBuilder<ResourceNode> resourceNodeBuilder) {
 
-        checkNotNull(resourcePath);
         checkNotNull(modelProxyBuilder);
         checkNotNull(resourceNodeBuilder);
 
-        return new ResourceBuilder(resourcePath, modelProxyBuilder, resourceNodeBuilder);
+        return new ResourceBuilder(modelProxyBuilder, resourceNodeBuilder);
+    }
+
+    public ResourceBuilder withResourcePath(String resourcePath) {
+
+        this.resourcePath = resourcePath;
+        return this;
     }
 
     public ResourceBuilder withDescription(String description) {
@@ -82,13 +83,12 @@ public class ResourceBuilder extends BaseBuilder<Resource> {
             createProperty(restNode, "description", description);
         }
 
+        for (MethodBuilder methodBuilder : methodBuilders) {
+            rn.getValue().addChild(methodBuilder.build());
+        }
+
         org.raml.v2.internal.impl.commons.model.Resource resource =
             new org.raml.v2.internal.impl.commons.model.Resource(rn);
         return modelProxyBuilder.buildForNode(resource);
     }
-
-    private void createKey(ResourceNode rn, String key) {
-        rn.addChild(new StringNodeImpl(key));
-    }
-
 }

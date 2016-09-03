@@ -3,6 +3,7 @@ package org.raml.builders.node;
 import com.google.inject.Exposed;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
+import org.raml.v2.internal.impl.commons.nodes.MethodNode;
 import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 
 public class NodeBuilderModule extends PrivateModule {
@@ -17,6 +18,16 @@ public class NodeBuilderModule extends PrivateModule {
         return new NodeBuilder<ResourceNode>() {
             @Override public ResourceNode build() {
                 return new ResourceNode();
+            }
+        };
+    }
+
+    @Provides
+    @Exposed
+    NodeBuilder<MethodNode> methodNodeNodeBuilder() {
+        return new NodeBuilder<MethodNode>() {
+            @Override public MethodNode build() {
+                return new MethodNode();
             }
         };
     }
