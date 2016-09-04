@@ -3,6 +3,7 @@ package org.raml.sandbox;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.raml.builders.BuilderModule;
+import org.raml.builders.Builders;
 import org.raml.builders.MethodBuilder;
 import org.raml.builders.ResourceBuilder;
 import org.raml.builders.node.NodeBuilderModule;
@@ -41,10 +42,8 @@ public class FunMain {
         }
 
 
-        Injector injector = Guice.createInjector(new BuilderModule(), new ModelProxyBuilderModule(),
-            new NodeBuilderModule());
-        ResourceBuilder resourceBuilder = injector.getInstance(ResourceBuilder.class);
-        MethodBuilder methodBuilder = injector.getInstance(MethodBuilder.class);
+        ResourceBuilder resourceBuilder = Builders.resourceBuilder();
+        MethodBuilder methodBuilder = Builders.methodBuilder();
         Resource r = resourceBuilder.withResourcePath("/baah").withDisplayName("sheep")
             .withDescription("It works!").withMethods(methodBuilder.withName("post")).build();
 
