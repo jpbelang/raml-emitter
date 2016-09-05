@@ -17,7 +17,7 @@ public class ContainingNodeRecognizer implements Recognizer {
         return (node.getChildren().size() >= 1) && node.getChildren().get(0) instanceof SimpleTypeNode;
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
         return ((SimpleTypeNode) node.getChildren().get(0)).getValue() + ":";
     }
 

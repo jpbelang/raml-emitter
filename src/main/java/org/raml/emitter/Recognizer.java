@@ -12,7 +12,7 @@ public interface Recognizer {
 
     boolean looksLike(Node node);
 
-    String getFragment(Node node);
+    String getFragment(Node node, String indent);
 
     List<Node> getChildren(Node node);
 }

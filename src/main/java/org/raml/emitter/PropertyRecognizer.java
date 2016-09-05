@@ -36,7 +36,7 @@ public class PropertyRecognizer extends AbstractLeafRecognizer implements Recogn
         return value.getKey().toString().equals("value");
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
 
         KeyValueNode kvn = (KeyValueNode) node;
         KeyValueNode valueNode = (KeyValueNode) node.getChildren().get(1).getChildren().get(0);

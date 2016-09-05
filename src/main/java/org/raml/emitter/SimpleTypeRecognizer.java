@@ -24,7 +24,7 @@ public class SimpleTypeRecognizer extends AbstractLeafRecognizer implements Reco
 
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
 
         KeyValueNode kvn = (KeyValueNode) node;
         return kvn.getKey() + ": " + node.getChildren().get(1).toString();

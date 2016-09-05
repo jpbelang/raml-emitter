@@ -12,7 +12,7 @@ public class EmptyLeafRecognizer extends AbstractLeafRecognizer implements Recog
         return node.getChildren().size() == 0;
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
         return node.toString() + ":";
     }
 

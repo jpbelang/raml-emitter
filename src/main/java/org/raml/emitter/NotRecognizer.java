@@ -12,7 +12,7 @@ public class NotRecognizer extends AbstractLeafRecognizer implements Recognizer 
         return true;
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
 
         return "";
     }

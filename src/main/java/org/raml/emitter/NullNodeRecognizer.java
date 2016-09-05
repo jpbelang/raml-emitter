@@ -24,7 +24,7 @@ public class NullNodeRecognizer extends AbstractLeafRecognizer implements Recogn
 
     }
 
-    @Override public String getFragment(Node node) {
+    @Override public String getFragment(Node node, String indent) {
 
         KeyValueNode kvn = (KeyValueNode) node;
         return kvn.getKey() + ":";
