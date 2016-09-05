@@ -12,8 +12,7 @@ public class NotRecognizer extends AbstractLeafRecognizer implements Recognizer 
         return true;
     }
 
-    @Override public String getFragment(Node node, String indent) {
+    @Override public void writeNode(Node node, RamlWriter writer) {
 
-        return "";
     }
 }

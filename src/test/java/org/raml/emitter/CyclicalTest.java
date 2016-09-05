@@ -57,7 +57,7 @@ public class CyclicalTest {
 
     private Api reParse(Api api) throws NoSuchFieldException, IllegalAccessException, IOException {
         StringWriter sw = new StringWriter();
-        Emitter.emit(api, sw);
+        Emitter.emit(api, new RamlWriterImpl(sw));
         System.err.println(sw.toString());
         StringReader sr = new StringReader(sw.toString());
 

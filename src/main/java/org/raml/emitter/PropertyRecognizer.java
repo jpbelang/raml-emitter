@@ -5,6 +5,8 @@ import org.raml.yagi.framework.nodes.Node;
 import org.raml.yagi.framework.nodes.NullNode;
 import org.raml.yagi.framework.nodes.ObjectNode;
 
+import java.io.IOException;
+
 /**
  * Created by ebeljea on 8/31/16.
  * Copyright Ericsson.
@@ -36,14 +38,15 @@ public class PropertyRecognizer extends AbstractLeafRecognizer implements Recogn
         return value.getKey().toString().equals("value");
     }
 
-    @Override public String getFragment(Node node, String indent) {
+    @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
 
         KeyValueNode kvn = (KeyValueNode) node;
         KeyValueNode valueNode = (KeyValueNode) node.getChildren().get(1).getChildren().get(0);
+
         if (valueNode instanceof NullNode) {
-            return kvn.getKey() + ":";
+            writer.writeNode(kvn.getKey().toString());
         } else {
-            return kvn.getKey() + ": " + valueNode.getValue();
+            writer.writeProperty(kvn.getKey().toString(), valueNode.getValue().toString());
         }
     }
 }

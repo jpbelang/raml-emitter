@@ -3,6 +3,7 @@ package org.raml.emitter;
 import org.raml.yagi.framework.nodes.Node;
 import org.raml.yagi.framework.nodes.SimpleTypeNode;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class ContainingNodeRecognizer implements Recognizer {
         return (node.getChildren().size() >= 1) && node.getChildren().get(0) instanceof SimpleTypeNode;
     }
 
-    @Override public String getFragment(Node node, String indent) {
-        return ((SimpleTypeNode) node.getChildren().get(0)).getValue() + ":";
+    @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
+        writer.writeNode(((SimpleTypeNode) node.getChildren().get(0)).getValue().toString());
     }
 
     @Override public List<Node> getChildren(Node node) {

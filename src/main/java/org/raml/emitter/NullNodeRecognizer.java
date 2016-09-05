@@ -4,6 +4,8 @@ import org.raml.yagi.framework.nodes.KeyValueNode;
 import org.raml.yagi.framework.nodes.Node;
 import org.raml.yagi.framework.nodes.NullNode;
 
+import java.io.IOException;
+
 /**
  * Created by ebeljea on 8/31/16.
  * Copyright Ericsson.
@@ -24,9 +26,9 @@ public class NullNodeRecognizer extends AbstractLeafRecognizer implements Recogn
 
     }
 
-    @Override public String getFragment(Node node, String indent) {
+    @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
 
         KeyValueNode kvn = (KeyValueNode) node;
-        return kvn.getKey() + ":";
+        writer.writeNode(kvn.getKey().toString());
     }
 }

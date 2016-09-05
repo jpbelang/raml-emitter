@@ -2,6 +2,7 @@ package org.raml.emitter;
 
 import org.raml.yagi.framework.nodes.Node;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public interface Recognizer {
 
     boolean looksLike(Node node);
 
-    String getFragment(Node node, String indent);
+    void writeNode(Node node, RamlWriter writer) throws IOException;
 
     List<Node> getChildren(Node node);
 }

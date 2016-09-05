@@ -15,21 +15,21 @@ import java.lang.reflect.Proxy;
  */
 public class Emitter {
 
-    public static void emit(Api api, Writer writer) throws NoSuchFieldException, IllegalAccessException, IOException {
+    public static void emit(Api api, RamlWriter writer) throws NoSuchFieldException, IllegalAccessException, IOException {
 
         InvocationHandler handler = Proxy.getInvocationHandler(api);
         Field o = handler.getClass().getDeclaredField("delegate");
         o.setAccessible(true);
         org.raml.v2.internal.impl.commons.model.Api delegate = (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
 
-        writer.write("#%RAML 1.0\n");
+        writer.version("1.0");
         for (Node child : delegate.getNode().getChildren()) {
 
-            emit(0, child, writer);
+            emitChildren(child, writer);
         }
     }
 
-    private static void emit(int depth, Node node, Writer writer) throws IOException {
+    private static void emitChildren(Node node, RamlWriter writer) throws IOException {
 
         Recognizer[] recogs =
                 {new TypeRecognizer(), new PropertyRecognizer(), new SimpleTypeRecognizer(), new NullNodeRecognizer(),
@@ -38,12 +38,10 @@ public class Emitter {
 
         Recognizer pr = selectRecognizer(recogs, node);
         if (pr.looksLike(node)) {
-            tabItUp(depth, writer);
-            String fragment = pr.getFragment(node, tabItUp(depth + 1));
-            writer.write(fragment + /* "# " + "[" + pr + "] " + */"\n");
+            pr.writeNode(node, writer);
             for (Node childNode : pr.getChildren(node)) {
 
-                emit(depth + 1, childNode, writer);
+                emitChildren(childNode, writer.childWriter());
             }
         }
     }

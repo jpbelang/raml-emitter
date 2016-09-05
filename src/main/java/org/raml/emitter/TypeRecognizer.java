@@ -4,6 +4,8 @@ import org.raml.v2.internal.impl.commons.nodes.TypeExpressionNode;
 import org.raml.yagi.framework.nodes.KeyValueNode;
 import org.raml.yagi.framework.nodes.Node;
 
+import java.io.IOException;
+
 /**
  * Created by Jean-Philippe Belanger on 9/4/16.
  */
@@ -20,13 +22,13 @@ public class TypeRecognizer extends AbstractLeafRecognizer {
 
             return false;
         }
+
         KeyValueNode kvn = (KeyValueNode) node;
 
         return kvn.getKey().toString().equals("type") && kvn.getValue() instanceof TypeExpressionNode;
     }
 
-    @Override public String getFragment(Node node, String indent) {
-        return "type: | \n" + indent + ((TypeExpressionNode) node.getChildren().get(1)).getTypeExpressionText().replace("\n",
-                "\n" + indent);
+    @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
+        writer.writeProperty("type", ((TypeExpressionNode) node.getChildren().get(1)).getTypeExpressionText());
     }
 }
