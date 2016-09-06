@@ -10,6 +10,7 @@ import org.raml.v2.api.model.common.ValidationResult;
 import org.raml.v2.api.model.v10.api.Api;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
 import org.raml.v2.api.model.v10.resources.Resource;
+import org.raml.v2.api.model.v10.system.types.MarkdownString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,9 @@ public class FunMain {
             Api api = ramlModelResult.getApiV10();
 
             List<TypeDeclaration> typeDeclarations = api.types();
+            MarkdownString description = api.description();
 
+            logger.info("description: {}", description);
             logger.info("type declarations: [{}]", Joiner.on(", ").join(typeDeclarations));
         }
 
