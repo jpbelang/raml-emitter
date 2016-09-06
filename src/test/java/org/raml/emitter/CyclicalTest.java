@@ -25,7 +25,7 @@ public class CyclicalTest {
         URL initial = CyclicalTest.class.getResource(name);
         File f = new File(initial.toURI());
         FileReader fr = new FileReader(f);
-        return buildModel(fr, new File(initial.toURI().getPath()).getParentFile().getAbsolutePath());
+        return buildModel(fr, new File(initial.toURI().getPath()).getAbsolutePath());
     }
 
     public static Api buildModel(Reader reader, String location) {
@@ -139,6 +139,15 @@ public class CyclicalTest {
     public void testUsingStrict() throws Exception {
 
         Api api = buildModel("/examples/defining-examples/using-strict.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+    @Test
+    public void testAlainNApi() throws Exception {
+
+        Api api = buildModel("/examples/others/alainn-mobile-shopping/api.raml");
         Api newApi = reParse(api);
 
         compareModels(api, newApi);

@@ -17,7 +17,7 @@ public class RamlWriterImpl implements RamlWriter {
         this.level = 0;
     }
 
-    public RamlWriterImpl(Writer writer, int level) {
+    private RamlWriterImpl(Writer writer, int level) {
         this.writer = writer;
         this.level = level;
     }
@@ -25,7 +25,14 @@ public class RamlWriterImpl implements RamlWriter {
     @Override public void writeProperty(String key, String value) throws IOException {
 
         tabItUp(level, writer);
-        writer.write(key + ": " + value + "\n");
+        if (!value.contains("\n")) {
+            writer.write(key + ": " + value + "\n");
+        } else {
+            String newValue = value.replace("\n", "\n" + tabItUp(level + 1));
+            writer.write(key + ": |\n");
+            tabItUp(level + 1, writer);
+            writer.write(newValue + "\n");
+        }
     }
 
     @Override public void writeNode(String nodeName) throws IOException {
