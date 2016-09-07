@@ -1,5 +1,6 @@
 package org.raml.emitter;
 
+import org.raml.utils.NodeExtractor;
 import org.raml.v2.api.model.v10.api.Api;
 import org.raml.yagi.framework.nodes.Node;
 
@@ -15,12 +16,10 @@ import java.lang.reflect.Proxy;
  */
 public class Emitter {
 
-    public static void emit(Api api, RamlWriter writer) throws NoSuchFieldException, IllegalAccessException, IOException {
+    public static void emit(Api api, RamlWriter writer) throws IOException {
 
-        InvocationHandler handler = Proxy.getInvocationHandler(api);
-        Field o = handler.getClass().getDeclaredField("delegate");
-        o.setAccessible(true);
-        org.raml.v2.internal.impl.commons.model.Api delegate = (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
+        //check ça mon JÉPI
+        org.raml.v2.internal.impl.commons.model.Api delegate = NodeExtractor.extractNodeFromProxy(api);
 
         writer.version("1.0");
         for (Node child : delegate.getNode().getChildren()) {

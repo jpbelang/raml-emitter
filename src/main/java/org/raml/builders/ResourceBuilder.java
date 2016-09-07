@@ -2,7 +2,7 @@ package org.raml.builders;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.raml.builders.node.NodeBuilder;
-import org.raml.builders.proxy.ModelProxyBuilder;
+import org.raml.factories.proxy.ModelProxyFactory;
 import org.raml.v2.api.model.v10.resources.Resource;
 import org.raml.v2.internal.impl.commons.nodes.ResourceNode;
 import org.raml.yagi.framework.nodes.ObjectNode;
@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ResourceBuilder extends BaseBuilder<Resource> {
 
-    private final ModelProxyBuilder<Resource> modelProxyBuilder;
+    private final ModelProxyFactory<Resource> modelProxyFactory;
     private final NodeBuilder<ResourceNode> resourceNodeBuilder;
 
     private String description;
@@ -22,20 +22,20 @@ public class ResourceBuilder extends BaseBuilder<Resource> {
     private String displayName;
     private MethodBuilder[] methodBuilders;
 
-    @VisibleForTesting ResourceBuilder(ModelProxyBuilder<Resource> modelProxyBuilder,
+    @VisibleForTesting ResourceBuilder(ModelProxyFactory<Resource> modelProxyFactory,
         NodeBuilder<ResourceNode> resourceNodeBuilder) {
 
-        this.modelProxyBuilder = modelProxyBuilder;
+        this.modelProxyFactory = modelProxyFactory;
         this.resourceNodeBuilder = resourceNodeBuilder;
     }
 
-    static ResourceBuilder create(ModelProxyBuilder<Resource> modelProxyBuilder,
+    static ResourceBuilder create(ModelProxyFactory<Resource> modelProxyFactory,
         NodeBuilder<ResourceNode> resourceNodeBuilder) {
 
-        checkNotNull(modelProxyBuilder);
+        checkNotNull(modelProxyFactory);
         checkNotNull(resourceNodeBuilder);
 
-        return new ResourceBuilder(modelProxyBuilder, resourceNodeBuilder);
+        return new ResourceBuilder(modelProxyFactory, resourceNodeBuilder);
     }
 
     public ResourceBuilder withResourcePath(String resourcePath) {
@@ -87,6 +87,6 @@ public class ResourceBuilder extends BaseBuilder<Resource> {
 
         org.raml.v2.internal.impl.commons.model.Resource resource =
             new org.raml.v2.internal.impl.commons.model.Resource(rn);
-        return modelProxyBuilder.buildForNode(resource);
+        return modelProxyFactory.buildForNode(resource);
     }
 }
