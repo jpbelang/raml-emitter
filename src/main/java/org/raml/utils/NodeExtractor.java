@@ -9,6 +9,7 @@ import java.lang.reflect.Proxy;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.raml.utils.FieldExtractor.getFieldValue;
 
 public class NodeExtractor {
 
@@ -28,12 +29,5 @@ public class NodeExtractor {
         } catch (IllegalAccessException e) {
             throw new NodeExtractionException("unable to extract field: " + delegateFieldIdentifier, e);
         }
-    }
-
-    private static <T> T getFieldValue(String fieldName, Object instance)
-        throws IllegalAccessException, NoSuchFieldException {
-        Field field = instance.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return (T) field.get(instance);
     }
 }

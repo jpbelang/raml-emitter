@@ -43,34 +43,8 @@ public class FunMain {
         } else {
             Api api = ramlModelResult.getApiV10();
 
-            AnnotableSimpleType<String> title = api.title();
-
-            logger.info("title: {}", title);
-            logger.info("title value: {}", title.value());
-            List<AnnotationRef> annotations = title.annotations();
-            logger.info("title annotations: [{}]", Joiner.on(", ").join(annotations));
 
 
-            ApiMutator mutator = ApiMutator.forApi(api);
-
-            for (AnnotationRef annotationRef : annotations) {
-                AnnotationRefMutator annotationRefMutator = AnnotationRefMutator.forAnnotationRef(annotationRef);
-            }
-
-
-            logger.info("api mutator: {}", mutator);
         }
-    }
-
-    private static void previousStuff() {
-        ResourceBuilder resourceBuilder = Builders.resourceBuilder();
-        MethodBuilder methodBuilder = Builders.methodBuilder();
-        Resource r = resourceBuilder.withResourcePath("/baah").withDisplayName("sheep")
-            .withDescription("It works!").withMethods(methodBuilder.withName("post")).build();
-
-        System.err.println("this " + r.description().value());
-        System.err.println("this " + r.displayName().value());
-        System.err.println("this " + r.relativeUri().value());
-        System.err.println("methods: " + r.methods());
     }
 }
