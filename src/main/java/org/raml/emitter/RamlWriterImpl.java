@@ -51,7 +51,7 @@ public class RamlWriterImpl implements RamlWriter {
 
     @Override public void rawWrite(String value) throws IOException {
 
-        writer.write(value.trim());
+        writer.write(tabItUp(level) + value);
     }
 
     @Override public RamlWriter childWriter() {
@@ -98,7 +98,17 @@ public class RamlWriterImpl implements RamlWriter {
         for (Node node : an.getChildren()) {
             Emitter.emitNode(node, this);
         }
-        writer.write(tabItUp(level));
+        // writer.write(tabItUp(level));
         writer.write(" ]\n");
     }
+
+    @Override public void writeSequence(String s, ArrayNode an) throws IOException {
+        writer.write(tabItUp(level));
+        writer.write(s + ": \n");
+        for (Node node : an.getChildren()) {
+            writer.write(tabItUp(level + 1) + "-\n");
+            Emitter.emitNode(node, this.childWriter().childWriter());  // hugh
+        }
+    }
+
 }

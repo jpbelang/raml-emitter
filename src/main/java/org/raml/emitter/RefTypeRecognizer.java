@@ -18,6 +18,6 @@ public class RefTypeRecognizer extends AbstractLeafRecognizer implements Recogni
     @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
 
         ReferenceNode ref = (ReferenceNode) node;
-        writer.rawWrite(ref.getSource().toString());
+        writer.rawWrite(ref.getSource().toString() + "\n");
     }
 }

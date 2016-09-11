@@ -36,7 +36,7 @@ public class Emitter {
         emitChildren(node, writer);
     }
 
-    public static void emitNode(Node node, RamlWriterImpl ramlWriter) throws IOException {
+    public static void emitNode(Node node, RamlWriter ramlWriter) throws IOException {
 
         emitChildren(node, ramlWriter);
     }

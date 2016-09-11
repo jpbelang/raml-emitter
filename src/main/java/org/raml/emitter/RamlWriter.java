@@ -23,4 +23,6 @@ public interface RamlWriter {
     void writeToFile(String name, Node refNode) throws IOException;
 
     void writeArray(String s, ArrayNode an) throws IOException;
+
+    void writeSequence(String s, ArrayNode an) throws IOException;
 }

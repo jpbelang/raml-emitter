@@ -3,7 +3,6 @@ package org.raml.emitter;
 import org.raml.yagi.framework.nodes.ArrayNode;
 import org.raml.yagi.framework.nodes.KeyValueNode;
 import org.raml.yagi.framework.nodes.Node;
-import org.raml.yagi.framework.nodes.ReferenceNode;
 
 import java.io.IOException;
 
@@ -32,14 +31,14 @@ public class ObjectArrayPropertyRecognizer extends AbstractLeafRecognizer implem
 
         ArrayNode an = (ArrayNode) kvn.getValue();
 
-        return node.getChildren().get(1) instanceof ArrayNode && an.getChildren().get(0) instanceof ReferenceNode;
+        return node.getChildren().get(1) instanceof ArrayNode /*&& an.getChildren().get(0) instanceof ReferenceNode*/;
     }
 
     @Override public void writeNode(Node node, RamlWriter writer) throws IOException {
 
         KeyValueNode kvn = (KeyValueNode) node;
         ArrayNode an = (ArrayNode) kvn.getValue();
-        writer.writeArray(kvn.getKey().toString(), an);
+        writer.writeSequence(kvn.getKey().toString(), an);
     }
 
 }
