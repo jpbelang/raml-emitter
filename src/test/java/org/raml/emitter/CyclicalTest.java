@@ -1,5 +1,6 @@
 package org.raml.emitter;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -196,7 +197,7 @@ public class CyclicalTest {
 
         compareModels(api, newApi);
     }
-/*
+
     @Test
     public void testMobileWorldMusicApi() throws Exception {
 
@@ -216,6 +217,7 @@ public class CyclicalTest {
     }
 
     @Test
+    @Ignore
     public void testSimpleResourceTypes() throws Exception {
 
         Api api = buildModel("/examples/resourcetypes-traits/simple-resourcetype.raml");
@@ -225,6 +227,7 @@ public class CyclicalTest {
     }
 
     @Test
+    @Ignore
     public void testOptionalProperties() throws Exception {
 
         Api api = buildModel("/examples/resourcetypes-traits/optional-properties.raml");
@@ -235,6 +238,7 @@ public class CyclicalTest {
 
 
     @Test
+    @Ignore
     public void testTypeSystemComplex() throws Exception {
 
         Api api = buildModel("/examples/typesystem/complex.raml");
@@ -244,6 +248,7 @@ public class CyclicalTest {
     }
 
     @Test
+    @Ignore
     public void testTypeSystemAFileType() throws Exception {
 
         Api api = buildModel("/examples/typesystem/file-type.raml");
@@ -251,5 +256,4 @@ public class CyclicalTest {
 
         compareModels(api, newApi);
     }
-*/
 }
