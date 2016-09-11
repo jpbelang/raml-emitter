@@ -10,6 +10,10 @@ import java.util.List;
 /**
  * Created by ebeljea on 9/3/16.
  * Copyright Ericsson.
+ *
+ * This is for spotting a node with a name and children:
+ *      /pets:  # this is such a node
+ *          get: # so is this....
  */
 public class ContainingNodeRecognizer implements Recognizer {
 
@@ -25,7 +29,7 @@ public class ContainingNodeRecognizer implements Recognizer {
     @Override public List<Node> getChildren(Node node) {
         if (node.getChildren().size() >= 2) {
 
-            return node.getChildren().get(1).getChildren();
+            return node.getChildren();
         } else {
             return Collections.emptyList();
         }

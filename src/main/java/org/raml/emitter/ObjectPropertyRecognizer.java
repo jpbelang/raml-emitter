@@ -9,9 +9,9 @@ import java.io.IOException;
 
 /**
  * Created by ebeljea on 8/31/16.
- * Copyright Ericsson.
+ * KeyValue node with an object node as a value.  Handling it as a string right now.
  */
-public class PropertyRecognizer extends AbstractLeafRecognizer implements Recognizer {
+public class ObjectPropertyRecognizer extends AbstractLeafRecognizer implements Recognizer {
     @Override public boolean looksLike(Node node) {
 
         if (!(node instanceof KeyValueNode)) {

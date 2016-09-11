@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  * Created by ebeljea on 8/31/16.
- * Copyright Ericsson.
+ * KeyValue node that holds a simple type as a value.
  */
 public class SimpleTypeRecognizer extends AbstractLeafRecognizer implements Recognizer {
     @Override public boolean looksLike(Node node) {

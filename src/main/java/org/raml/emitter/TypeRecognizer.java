@@ -8,6 +8,7 @@ import java.io.IOException;
 
 /**
  * Created by Jean-Philippe Belanger on 9/4/16.
+ * Specific recognition for "type", I'll see if I can generalize.
  */
 public class TypeRecognizer extends AbstractLeafRecognizer {
 

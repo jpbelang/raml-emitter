@@ -1,6 +1,8 @@
 package org.raml.emitter;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.raml.v2.api.RamlModelBuilder;
 import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
@@ -17,8 +19,12 @@ import java.net.URL;
 
 /**
  * Created by Jean-Philippe Belanger on 9/4/16.
+ * Just potential zeroes and ones
  */
 public class CyclicalTest {
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     public static Api buildModel(String name) throws URISyntaxException, FileNotFoundException {
 
@@ -39,7 +45,6 @@ public class CyclicalTest {
 
             throw new AssertionError(resultString.toString());
         } else {
-            ramlModelResult.getApiV08();
             return ramlModelResult.getApiV10();
         }
     }
@@ -56,10 +61,13 @@ public class CyclicalTest {
     }
 
     private Api reParse(Api api) throws NoSuchFieldException, IllegalAccessException, IOException {
-        StringWriter sw = new StringWriter();
+
+        FileWriter sw = new FileWriter(folder.newFile("api.raml"));
         Emitter.emit(api, new RamlWriterImpl(sw));
+        sw.close();
+
         System.err.println(sw.toString());
-        StringReader sr = new StringReader(sw.toString());
+        FileReader sr = new FileReader(new File(folder.getRoot(), "api.raml"));
 
         return buildModel(sr, ".");
     }
@@ -145,12 +153,104 @@ public class CyclicalTest {
     }
 
     @Test
-    public void testAlainNApi() throws Exception {
+    public void testTypeSystemSimple() throws Exception {
 
-        Api api = buildModel("/examples/others/alainn-mobile-shopping/api.raml");
+        Api api = buildModel("/examples/typesystem/simple.raml");
         Api newApi = reParse(api);
 
         compareModels(api, newApi);
     }
 
+    @Test
+    public void testSchemas() throws Exception {
+
+        Api api = buildModel("/examples/schemas/api.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+
+    /*   @Test
+       public void testAlainNApi() throws Exception {
+
+           Api api = buildModel("/examples/others/alainn-mobile-shopping/api.raml");
+           Api newApi = reParse(api);
+
+           compareModels(api, newApi);
+       }
+
+       @Test
+       public void testAlainNHypermedia() throws Exception {
+
+           Api api = buildModel("/examples/others/alainn-mobile-shopping/hypermedia.raml");
+           Api newApi = reParse(api);
+
+           compareModels(api, newApi);
+       }
+   */
+    @Test
+    public void testMobileOrderApi() throws Exception {
+
+        Api api = buildModel("/examples/others/mobile-order-api/api.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+/*
+    @Test
+    public void testMobileWorldMusicApi() throws Exception {
+
+        Api api = buildModel("/examples/others/world-music-api/api.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+    @Test
+    public void testLibraries() throws Exception {
+
+        Api api = buildModel("/examples/libraries/api.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+    @Test
+    public void testSimpleResourceTypes() throws Exception {
+
+        Api api = buildModel("/examples/resourcetypes-traits/simple-resourcetype.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+    @Test
+    public void testOptionalProperties() throws Exception {
+
+        Api api = buildModel("/examples/resourcetypes-traits/optional-properties.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+
+    @Test
+    public void testTypeSystemComplex() throws Exception {
+
+        Api api = buildModel("/examples/typesystem/complex.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+
+    @Test
+    public void testTypeSystemAFileType() throws Exception {
+
+        Api api = buildModel("/examples/typesystem/file-type.raml");
+        Api newApi = reParse(api);
+
+        compareModels(api, newApi);
+    }
+*/
 }

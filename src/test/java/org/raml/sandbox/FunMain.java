@@ -37,7 +37,9 @@ public class FunMain {
             }
         } else {
             Api api = ramlModelResult.getApiV10();
+            org.raml.v2.api.model.v08.api.Api apiv8 = ramlModelResult.getApiV08();
 
+            System.err.println(api + " " + apiv8);
             List<TypeDeclaration> typeDeclarations = api.types();
 
             logger.info("type declarations: [{}]", Joiner.on(", ").join(typeDeclarations));

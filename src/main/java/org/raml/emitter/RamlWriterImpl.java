@@ -1,5 +1,9 @@
 package org.raml.emitter;
 
+import org.raml.yagi.framework.nodes.Node;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -9,17 +13,20 @@ import java.io.Writer;
 public class RamlWriterImpl implements RamlWriter {
 
     private final Writer writer;
+    private final String directory;
     private final int level;
 
-    public RamlWriterImpl(Writer writer) {
+    public RamlWriterImpl(Writer writer, String directory) {
 
         this.writer = writer;
+        this.directory = directory;
         this.level = 0;
     }
 
-    private RamlWriterImpl(Writer writer, int level) {
+    private RamlWriterImpl(Writer writer, int level, String directory) {
         this.writer = writer;
         this.level = level;
+        this.directory = directory;
     }
 
     @Override public void writeProperty(String key, String value) throws IOException {
@@ -42,7 +49,7 @@ public class RamlWriterImpl implements RamlWriter {
     }
 
     @Override public RamlWriter childWriter() {
-        return new RamlWriterImpl(writer, level + 1);
+        return new RamlWriterImpl(writer, level + 1, directory);
     }
 
     @Override public void version(String version) throws IOException {
@@ -67,4 +74,9 @@ public class RamlWriterImpl implements RamlWriter {
         return sb.toString();
     }
 
+    @Override public void writeToFile(String name, Node refNode) throws IOException {
+
+        FileWriter fw = new FileWriter(new File(directory, name));
+        fw.write(refNode.toString());
+    }
 }

@@ -4,7 +4,6 @@ import org.raml.v2.api.model.v10.api.Api;
 import org.raml.yagi.framework.nodes.Node;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -32,8 +31,7 @@ public class Emitter {
     private static void emitChildren(Node node, RamlWriter writer) throws IOException {
 
         Recognizer[] recogs =
-                {new TypeRecognizer(), new PropertyRecognizer(), new SimpleTypeRecognizer(), new NullNodeRecognizer(),
-                        new EmptyLeafRecognizer(),
+                {new TypeRecognizer(), new LibraryRecognizer(), new ObjectPropertyRecognizer(), new SimpleTypeRecognizer()/*, new NullNodeRecognizer()*/,
                         new ContainingNodeRecognizer(), new NotRecognizer()};
 
         Recognizer pr = selectRecognizer(recogs, node);
@@ -55,22 +53,4 @@ public class Emitter {
 
         return new NotRecognizer();
     }
-
-    private static void tabItUp(int depth, Writer writer) throws IOException {
-        for (int a = 0; a < depth; a++) {
-
-            writer.write("  ");
-        }
-    }
-
-    private static String tabItUp(int depth) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for (int a = 0; a < depth; a++) {
-
-            sb.append("  ");
-        }
-
-        return sb.toString();
-    }
-
 }
