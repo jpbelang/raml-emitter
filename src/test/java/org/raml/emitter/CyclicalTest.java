@@ -55,21 +55,20 @@ public class CyclicalTest {
         InvocationHandler handler = Proxy.getInvocationHandler(api);
         Field o = handler.getClass().getDeclaredField("delegate");
         o.setAccessible(true);
-        org.raml.v2.internal.impl.commons.model.Api delegate = (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
 
-        return delegate;
+        return (org.raml.v2.internal.impl.commons.model.Api) o.get(handler);
     }
 
     private Api reParse(Api api) throws NoSuchFieldException, IllegalAccessException, IOException {
 
         FileWriter sw = new FileWriter(folder.newFile("api.raml"));
-        Emitter.emit(api, new RamlWriterImpl(sw));
+        Emitter.emit(api, new RamlWriterImpl(sw, folder.getRoot().getAbsolutePath()));
         sw.close();
 
         System.err.println(sw.toString());
         FileReader sr = new FileReader(new File(folder.getRoot(), "api.raml"));
 
-        return buildModel(sr, ".");
+        return buildModel(sr, folder.getRoot().getAbsolutePath() + "/api.raml");
     }
 
     private void compareModels(Api api, Api newApi) throws NoSuchFieldException, IllegalAccessException {

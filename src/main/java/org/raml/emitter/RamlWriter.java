@@ -1,5 +1,6 @@
 package org.raml.emitter;
 
+import org.raml.yagi.framework.nodes.ArrayNode;
 import org.raml.yagi.framework.nodes.Node;
 
 import java.io.IOException;
@@ -13,9 +14,13 @@ public interface RamlWriter {
 
     void writeNode(String nodeName) throws IOException;
 
+    void rawWrite(String value) throws IOException;
+
     RamlWriter childWriter();
 
     void version(String version) throws IOException;
 
     void writeToFile(String name, Node refNode) throws IOException;
+
+    void writeArray(String s, ArrayNode an) throws IOException;
 }

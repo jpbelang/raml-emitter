@@ -1,5 +1,6 @@
 package org.raml.emitter;
 
+import org.raml.yagi.framework.nodes.ArrayNode;
 import org.raml.yagi.framework.nodes.Node;
 
 import java.io.File;
@@ -48,6 +49,11 @@ public class RamlWriterImpl implements RamlWriter {
         writer.write(nodeName + ":\n");
     }
 
+    @Override public void rawWrite(String value) throws IOException {
+
+        writer.write(value.trim());
+    }
+
     @Override public RamlWriter childWriter() {
         return new RamlWriterImpl(writer, level + 1, directory);
     }
@@ -76,7 +82,23 @@ public class RamlWriterImpl implements RamlWriter {
 
     @Override public void writeToFile(String name, Node refNode) throws IOException {
 
-        FileWriter fw = new FileWriter(new File(directory, name));
-        fw.write(refNode.toString());
+        try {
+            FileWriter fw = new FileWriter(new File(directory, name));
+            Emitter.emitLibrary(refNode, new RamlWriterImpl(fw, name));
+            fw.close();
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+    @Override public void writeArray(String s, ArrayNode an) throws IOException {
+        writer.write(tabItUp(level));
+        writer.write(s + ": ");
+        writer.write("[ ");
+        for (Node node : an.getChildren()) {
+            Emitter.emitNode(node, this);
+        }
+        writer.write(tabItUp(level));
+        writer.write(" ]\n");
     }
 }

@@ -28,10 +28,24 @@ public class Emitter {
         }
     }
 
+    public static void emitLibrary(Node node, RamlWriter writer)
+            throws NoSuchFieldException, IllegalAccessException, IOException {
+
+        writer.version("1.0 Library");
+
+        emitChildren(node, writer);
+    }
+
+    public static void emitNode(Node node, RamlWriterImpl ramlWriter) throws IOException {
+
+        emitChildren(node, ramlWriter);
+    }
+
     private static void emitChildren(Node node, RamlWriter writer) throws IOException {
 
         Recognizer[] recogs =
-                {new TypeRecognizer(), new LibraryRecognizer(), new ObjectPropertyRecognizer(), new SimpleTypeRecognizer()/*, new NullNodeRecognizer()*/,
+                {new RefTypeRecognizer(), new TypeRecognizer(), new LibraryRecognizer(), new ObjectArrayPropertyRecognizer(),
+                        new ObjectPropertyRecognizer(), new SimpleTypeRecognizer()/*, new NullNodeRecognizer()*/,
                         new ContainingNodeRecognizer(), new NotRecognizer()};
 
         Recognizer pr = selectRecognizer(recogs, node);
@@ -53,4 +67,5 @@ public class Emitter {
 
         return new NotRecognizer();
     }
+
 }
