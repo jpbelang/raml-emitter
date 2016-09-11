@@ -1,10 +1,11 @@
-package org.raml.builders.proxy;
+package org.raml.factories.proxy;
 
 import com.google.inject.Exposed;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
+import org.raml.v2.api.model.v10.declarations.AnnotationRef;
 import org.raml.v2.api.model.v10.resources.Resource;
 import org.raml.v2.internal.impl.commons.model.DefaultModelElement;
 import org.raml.v2.internal.impl.commons.model.StringType;
@@ -15,7 +16,7 @@ import org.raml.yagi.framework.model.NodeModel;
 
 import static org.raml.v2.api.RamlModelBuilder.MODEL_PACKAGE;
 
-public class ModelProxyBuilderModule extends PrivateModule {
+public class ModelProxyFactoryModule extends PrivateModule {
 
     @Override protected void configure() {
         //Hello sonar ;)
@@ -40,12 +41,22 @@ public class ModelProxyBuilderModule extends PrivateModule {
 
     @Provides
     @Exposed
-    @Singleton
-    ModelProxyBuilder<Resource> modelProxyBuilderForResource(final ModelBindingConfiguration configuration) {
-        return new ModelProxyBuilder<Resource>() {
+    @Singleton ModelProxyFactory<Resource> modelProxyBuilderForResource(final ModelBindingConfiguration configuration) {
+        return new ModelProxyFactory<Resource>() {
             @Override public Resource buildForNode(NodeModel node) {
                 return org.raml.yagi.framework.model.ModelProxyBuilder
                     .createModel(Resource.class, node, configuration);
+            }
+        };
+    }
+
+    @Provides
+    @Exposed
+    @Singleton ModelProxyFactory<AnnotationRef> annotationRefModelProxyBuilder(final ModelBindingConfiguration configuration) {
+        return new ModelProxyFactory<AnnotationRef>() {
+            @Override public AnnotationRef buildForNode(NodeModel node) {
+                return org.raml.yagi.framework.model.ModelProxyBuilder
+                    .createModel(AnnotationRef.class, node, configuration);
             }
         };
     }

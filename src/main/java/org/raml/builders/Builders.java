@@ -3,14 +3,14 @@ package org.raml.builders;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.raml.builders.node.NodeBuilderModule;
-import org.raml.builders.proxy.ModelProxyBuilderModule;
+import org.raml.factories.proxy.ModelProxyFactoryModule;
 
 public class Builders {
 
     //Idiomatic way to handle lazy initialization.
     private static class InjectorHolder {
         private static Injector injector = Guice
-            .createInjector(new BuilderModule(), new ModelProxyBuilderModule(),
+            .createInjector(new BuilderModule(), new ModelProxyFactoryModule(),
                 new NodeBuilderModule());
     }
 

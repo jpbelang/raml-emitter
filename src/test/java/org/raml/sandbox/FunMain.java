@@ -4,12 +4,17 @@ import com.google.common.base.Joiner;
 import org.raml.builders.Builders;
 import org.raml.builders.MethodBuilder;
 import org.raml.builders.ResourceBuilder;
+import org.raml.mutators.AnnotationRefMutator;
+import org.raml.mutators.ApiMutator;
 import org.raml.v2.api.RamlModelBuilder;
 import org.raml.v2.api.RamlModelResult;
 import org.raml.v2.api.model.common.ValidationResult;
 import org.raml.v2.api.model.v10.api.Api;
 import org.raml.v2.api.model.v10.datamodel.TypeDeclaration;
+import org.raml.v2.api.model.v10.declarations.AnnotationRef;
 import org.raml.v2.api.model.v10.resources.Resource;
+import org.raml.v2.api.model.v10.system.types.AnnotableSimpleType;
+import org.raml.v2.api.model.v10.system.types.MarkdownString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,25 +44,8 @@ public class FunMain {
             Api api = ramlModelResult.getApiV10();
             org.raml.v2.api.model.v08.api.Api apiv8 = ramlModelResult.getApiV08();
 
-            System.err.println(api + " " + apiv8);
-            List<TypeDeclaration> typeDeclarations = api.types();
 
-            logger.info("type declarations: [{}]", Joiner.on(", ").join(typeDeclarations));
+
         }
-
-
-
-    }
-
-    private static void previousStuff() {
-        ResourceBuilder resourceBuilder = Builders.resourceBuilder();
-        MethodBuilder methodBuilder = Builders.methodBuilder();
-        Resource r = resourceBuilder.withResourcePath("/baah").withDisplayName("sheep")
-            .withDescription("It works!").withMethods(methodBuilder.withName("post")).build();
-
-        System.err.println("this " + r.description().value());
-        System.err.println("this " + r.displayName().value());
-        System.err.println("this " + r.relativeUri().value());
-        System.err.println("methods: " + r.methods());
     }
 }

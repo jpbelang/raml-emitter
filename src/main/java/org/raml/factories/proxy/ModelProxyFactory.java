@@ -1,7 +1,7 @@
-package org.raml.builders.proxy;
+package org.raml.factories.proxy;
 
 import org.raml.yagi.framework.model.NodeModel;
 
-public interface ModelProxyBuilder<T> {
+public interface ModelProxyFactory<T> {
     T buildForNode(NodeModel node);
 }
