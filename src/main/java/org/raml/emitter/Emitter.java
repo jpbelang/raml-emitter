@@ -2,12 +2,10 @@ package org.raml.emitter;
 
 import org.raml.utils.NodeExtractor;
 import org.raml.v2.api.model.v10.api.Api;
+import org.raml.v2.internal.impl.commons.nodes.RamlDocumentNode;
 import org.raml.yagi.framework.nodes.Node;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
 
 /**
  * Created by ebeljea on 8/29/16.
@@ -18,10 +16,10 @@ public class Emitter {
     public static void emit(Api api, RamlWriter writer) throws IOException {
 
         //check ça mon JÉPI
-        org.raml.v2.internal.impl.commons.model.Api delegate = NodeExtractor.extractNodeFromProxy(api);
+        RamlDocumentNode node = NodeExtractor.extractNodeFromProxy(api);
 
         writer.version("1.0");
-        for (Node child : delegate.getNode().getChildren()) {
+        for (Node child : node.getChildren()) {
 
             emitChildren(child, writer);
         }
